@@ -1,0 +1,35 @@
+import re
+
+def is_valid_credit_card(card_number):
+    """
+  This function checks if a credit card number is valid based on ABCD Bank criteria.
+
+  Args:
+      card_number: The credit card number string to validate.
+
+  Returns:
+      "Valid" if the card number is valid, otherwise "Invalid".
+  """
+    pattern = r"^(?:4[0-9]{12}(?:[0-9]{3})?|[56][0-9]{14})$"
+  # Check if the card number starts with 4, 5, or 6 and has the correct number of digits
+    if not re.match(pattern, card_number):
+        return "Invalid"
+
+  # Check for non-digit characters, consecutive repetitions (more than 3), and separators other than '-'
+    if any(char.isalpha() or (str(c) * 4 in card_number for c in range(10)) or char not in "0123456789-" for char in card_number.replace("-", "")):
+        return "Invalid"
+
+  # Split the card number by '-' and check if each group has 4 digits
+    groups = card_number.split("-")
+    if len(groups) != 4 or any(len(group) != 4 for group in groups):
+        return "Invalid"
+
+    return "Valid"
+
+# Get the number of test cases
+num_tests = int(input())
+
+# Loop through each test case
+for _ in range(num_tests):
+    card_number = input()
+    print(is_valid_credit_card(card_number))
